@@ -5,15 +5,19 @@
   
 
   
-  <title>Hexo</title>
+  <title>计算机系统-逻辑地址和物理地址 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="地址空间与逻辑地址    在计算机系统中，每个目标程序都有一个地址空间，其中的单元编号称为逻辑地址，逻辑地址都是都是从0开始编号，因此逻辑地址又称为相对地址或虚拟地址。原则上讲，逻辑地址的最大值没有限制，用户可以无限制地加成自己的程序，但在具体应用中逻辑地址受地址寄存器位数的限制，如在Windows 2000中地址寄存器为32为，表示相对地址最大可达4GB。  储存空间与物理地址  计算机物理存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机系统-逻辑地址和物理地址">
+<meta property="og:url" content="http://yoursite.com/2019/03/25/计算机系统-逻辑地址和物理地址/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="地址空间与逻辑地址    在计算机系统中，每个目标程序都有一个地址空间，其中的单元编号称为逻辑地址，逻辑地址都是都是从0开始编号，因此逻辑地址又称为相对地址或虚拟地址。原则上讲，逻辑地址的最大值没有限制，用户可以无限制地加成自己的程序，但在具体应用中逻辑地址受地址寄存器位数的限制，如在Windows 2000中地址寄存器为32为，表示相对地址最大可达4GB。  储存空间与物理地址  计算机物理存">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-25T12:08:01.136Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="计算机系统-逻辑地址和物理地址">
+<meta name="twitter:description" content="地址空间与逻辑地址    在计算机系统中，每个目标程序都有一个地址空间，其中的单元编号称为逻辑地址，逻辑地址都是都是从0开始编号，因此逻辑地址又称为相对地址或虚拟地址。原则上讲，逻辑地址的最大值没有限制，用户可以无限制地加成自己的程序，但在具体应用中逻辑地址受地址寄存器位数的限制，如在Windows 2000中地址寄存器为32为，表示相对地址最大可达4GB。  储存空间与物理地址  计算机物理存">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,11 +64,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-计算机系统-存储管理" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-计算机系统-逻辑地址和物理地址" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/25/计算机系统-存储管理/" class="article-date">
+    <a href="/2019/03/25/计算机系统-逻辑地址和物理地址/" class="article-date">
   <time datetime="2019-03-25T11:37:40.000Z" itemprop="datePublished">2019-03-25</time>
 </a>
     
@@ -75,8 +77,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/25/计算机系统-存储管理/">计算机系统-存储管理</a>
+    <h1 class="article-title" itemprop="name">
+      计算机系统-逻辑地址和物理地址
     </h1>
   
 
@@ -96,73 +98,29 @@
 <li>静态重定位<br>所谓静态重定位，是指在作为装入过程中由装配程序一次性地对有关地址部分进行调整，在程序运行过程中不再修改。</li>
 <li>动态重定位<br>动态重定位方式下，作业装入时不进行地址调整，而是在作业执行过程访问指令或数据是，即访问逻辑地址时，由附加的硬件地址变换机构进行地址的转换。</li>
 </ul>
-<h3 id="存储管理的功能"><a href="#存储管理的功能" class="headerlink" title="存储管理的功能"></a>存储管理的功能</h3><p>  存储管理的主要任务是为多道程序的运行提供良好的环境，方便用户使用存储器，提高存储器的利用率，以及从逻辑上扩充内存。<br>  存储管理主要功能如下所述。  </p>
-<ol>
-<li>主存的分配和管理：对主存进行分配与回收，其中主存的分配原则是关键的内容，存储管理方案因此由此得名。</li>
-<li>地址映射：不同的存储管理方案，其地址映射方式及地址映射结构不同。</li>
-<li>存储保护与共享：保护进入内存的用户程序不破坏操作系统的存储空间，相互之间也不互相干扰；另外，当多个用户使用相同的库函数或例程的时候，要能够方便地实现共享，以提高内存空间的利用率。</li>
-<li>内存扩充：即虚拟存储器功能，采用虚拟存储技术，从逻辑上扩充内存容量，以解决”大作业“与”小主存“的矛盾。</li>
-</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/25/计算机系统-存储管理/" data-id="cjtoeds9k0001y308phgb4ah2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/25/计算机系统-逻辑地址和物理地址/" data-id="cjtobd7k20000el089x74ti4q" class="article-share-link">Share</a>
       
       
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/01/18/hello-world/" class="article-date">
-  <time datetime="2019-01-18T08:39:08.239Z" itemprop="datePublished">2019-01-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/18/hello-world/">Hello World</a>
-    </h1>
+    <a href="/2019/01/18/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/18/hello-world/" data-id="cjtoeds9g0000y308nqnbijme" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-
 
 </section>
         
@@ -193,7 +151,7 @@
       <ul>
         
           <li>
-            <a href="/2019/03/25/计算机系统-存储管理/">计算机系统-存储管理</a>
+            <a href="/2019/03/25/计算机系统-逻辑地址和物理地址/">计算机系统-逻辑地址和物理地址</a>
           </li>
         
           <li>
