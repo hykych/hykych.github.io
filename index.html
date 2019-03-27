@@ -62,6 +62,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Firecracker调研-API规范及用处" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/27/Firecracker调研-API规范及用处/" class="article-date">
+  <time datetime="2019-03-27T11:27:56.000Z" itemprop="datePublished">2019-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/27/Firecracker调研-API规范及用处/">Firecracker调研-API规范及用处</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>当Firecracker启动的时候，会通过unix socket暴露一个API,可用于：</p>
+<ul>
+<li>配置microVM：<ul>
+<li>设定CPU数量（默认为1）</li>
+<li>设定内存大小（默认128MB）</li>
+<li>选择CPU模板（目前由C3和T2可供选择）</li>
+</ul>
+</li>
+<li>添加一个或多个网络设备到microVM</li>
+<li>添加多个可读写或只读硬盘到microVM， 每一个表现为 file-backed block device(不太懂)</li>
+<li>触当用户在运行的时候触发 block device扫描。使得客户系统能够获取设备备份文件的大小（不太懂）</li>
+<li>更改块设备的备份文件，在客户启动前或后（不太懂）</li>
+<li>配置虚拟I/O设备的限流器，做到带宽限制，每秒操作数限制</li>
+<li>配置日志及计量系统</li>
+<li>[BETA] Configure the data tree of the guest-facing metadata service. The service is only available to the guest if this resource is configured.(不懂)</li>
+<li>[EXPERIMENTAL] 添加一个或多个[vsock sockets]到microVM</li>
+<li>制定microVM使用的内核镜像，根文件系统及启动参数</li>
+<li>定制microVM</li>
+</ul>
+<h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><h3 id="ACTIONS"><a href="#ACTIONS" class="headerlink" title="ACTIONS"></a>ACTIONS</h3><h4 id="BlockDeviceRescan"><a href="#BlockDeviceRescan" class="headerlink" title="BlockDeviceRescan"></a>BlockDeviceRescan</h4><p>   这个操作用于触发附在microVM上的一个块设备的重扫描，当一个块设备的backing file改变的时候，Rescanning是必须的，guest需要刷新它的内部数据结构来拾取这种改变<br>   这个操作只能在guest启动后执行。<br>   为了使重扫描正确运行，调用这个操作的时候块设备不能挂载在guest。否则这个调用会默默失败掉，guest的内部数据结构会处于一个不一致的状态</p>
+<h4 id="BlockDeviceRescan-Example"><a href="#BlockDeviceRescan-Example" class="headerlink" title="BlockDeviceRescan Example"></a>BlockDeviceRescan Example</h4>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># Create and set up a block device.</span><br><span class="line">touch $&#123;ro_drive_path&#125;</span><br><span class="line"></span><br><span class="line">curl --unix-socket $&#123;socket&#125; -i \</span><br><span class="line">     -X PUT &quot;http://localhost/drives/scratch&quot; \</span><br><span class="line">     -H &quot;accept: application/json&quot; \</span><br><span class="line">     -H &quot;Content-Type: application/json&quot; \</span><br><span class="line">     -d &quot;&#123;</span><br><span class="line">            \&quot;drive_id\&quot;: \&quot;scratch\&quot;,</span><br><span class="line">            \&quot;path_on_host\&quot;: \&quot;$&#123;ro_drive_path&#125;\&quot;,</span><br><span class="line">            \&quot;is_root_device\&quot;: false,</span><br><span class="line">            \&quot;is_read_only\&quot;: true</span><br><span class="line">         &#125;&quot;</span><br><span class="line"></span><br><span class="line"># Finish configuring and start the microVM. Wait for the guest to boot.</span><br><span class="line"></span><br><span class="line"># Resize the block device&apos;s backing file and create a filesystem in it.</span><br><span class="line">truncate --size 100M $&#123;ro_drive_path&#125;</span><br><span class="line">mkfs.ext4 $&#123;ro_drive_path&#125;</span><br><span class="line"></span><br><span class="line">curl --unix-socket $&#123;socket&#125; -i \</span><br><span class="line">     -X PUT &quot;http://localhost/actions&quot; \</span><br><span class="line">     -H &quot;accept: application/json&quot; \</span><br><span class="line">     -H &quot;Content-Type: application/json&quot; \</span><br><span class="line">     -d &quot;&#123;</span><br><span class="line">            \&quot;action_type\&quot;: \&quot;BlockDeviceRescan\&quot;,</span><br><span class="line">            \&quot;payload\&quot;: \&quot;scratch\&quot;</span><br><span class="line">         &#125;&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>Firecracker API 遵循OPEN API，了解OPEN API</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/27/Firecracker调研-API规范及用处/" data-id="cjtr7m81v0000xe08r4njtni9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Firecraker调研-初探" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/03/26/Firecraker调研-初探/" class="article-date">
@@ -139,7 +197,7 @@ curl --unix-socket /tmp/firecracker.socket -i \
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/26/Firecraker调研-初探/" data-id="cjtr4j5ua0000jk08kmopua88" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/26/Firecraker调研-初探/" data-id="cjtr7m81z0001xe08cnuwzcyy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -194,7 +252,7 @@ curl --unix-socket /tmp/firecracker.socket -i \
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/25/计算机系统-存储管理/" data-id="cjtr4j5ug0002jk08soilgbcv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/25/计算机系统-存储管理/" data-id="cjtr7m8220003xe08mrlorxdl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -239,7 +297,7 @@ curl --unix-socket /tmp/firecracker.socket -i \
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/18/hello-world/" data-id="cjtr4j5ue0001jk08aof7qabj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/18/hello-world/" data-id="cjtr7m8210002xe08jbvb9oq6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -278,6 +336,10 @@ curl --unix-socket /tmp/firecracker.socket -i \
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/27/Firecracker调研-API规范及用处/">Firecracker调研-API规范及用处</a>
+          </li>
         
           <li>
             <a href="/2019/03/26/Firecraker调研-初探/">Firecraker调研-初探</a>
