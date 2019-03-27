@@ -24,7 +24,7 @@ Firecracker 是 AWS 开源的用于 Serverless 计算的安全且快速的微虚
 
  
 ### quick-start 操作
-在本地电脑上操作，Firecracker目前支持 Linux x86_64 主机，内核版本在4.14+
+在本地电脑上操作，Firecracker目前支持 Linux x86_64 主机，内核版本在4.14+，同时需要开启KVM功能,且能够读写```/dev/kvm```
 首先需要三个文件（firecracker二进制文件，根文件系统和Linux内核）  
 打开两个命令行窗口  
 - 在第一个窗口：
