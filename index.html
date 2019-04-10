@@ -62,6 +62,49 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-山寨aws-lambda想法" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/10/山寨aws-lambda想法/" class="article-date">
+  <time datetime="2019-04-10T03:07:35.000Z" itemprop="datePublished">2019-04-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/10/山寨aws-lambda想法/">山寨aws lambda想法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>根据<a href="https://www.youtube.com/watch?v=QdzV04T_kec" target="_blank" rel="noopener">AWS re:Invent 2018: [REPEAT 1] A Serverless Journey: AWS Lambda Under the Hood</a>。<br>aws lambda 可以分为Controller Plane 和 Data Plane两大部分<br>Data Plane主要负责函数的调用，分为Synchronous Invoke 和 Asynchronous Invoke &amp; Events<br>Synchronous Invoke 分为以下几部分</p>
+<h4 id="Front-End-Invoke"><a href="#Front-End-Invoke" class="headerlink" title="Front End Invoke"></a>Front End Invoke</h4><p>此模块负责编排所有请求，包括同步和异步的,对请求进行鉴权</p>
+<h4 id="Counting-Service"><a href="#Counting-Service" class="headerlink" title="Counting Service"></a>Counting Service</h4><p>负责维护函数的当前并发数，aws宣称其使用 Quorum based protocol<br>aws将其设计成一个高吞吐低延时(1.5ms)的服务<br>目前看来是所有用户的调用都会经过这个Counting Service来做限流</p>
+<h4 id="Worker-Manager"><a href="#Worker-Manager" class="headerlink" title="Worker Manager"></a>Worker Manager</h4><p>管理Worker，跟踪sandbox的idle/busy状态，调度请求到可用的容器，或者选择Worker来创建容器<br>如果容量不够，会请求Placement Service获取新的Worker<br>当worker 和 sandbox 变成idle的时候会spin down来节省资源<br>同时会优先使用warm sandbox<br>有一个问题是当worker manger扩容的时候，warm sandbox的复用率会降低<br>同时如何防止用户的代码在后台运行</p>
+<h4 id="Worker"><a href="#Worker" class="headerlink" title="Worker"></a>Worker</h4><p>创建和管理sandbox，设置sandbox的cpu 和 memory limit, 当sandbox上的请求结束之后通知worker manager</p>
+<h4 id="Placement-Service"><a href="#Placement-Service" class="headerlink" title="Placement Service"></a>Placement Service</h4><p>放置sandbox到worker上，原则是一个worker要放置尽量多不同的sandbox以达到最大的资源使用率。<br>根据后述的演讲，它貌似是管理worker的，worker manager 从placement service 租用worker。<br>问题：如果这个Placement Service是选择worker来放置sandbox的，那么貌似承担了一部分worker manager的职责</p>
+<h4 id="想法"><a href="#想法" class="headerlink" title="想法"></a>想法</h4><p>目前他们所用的sandbox<a href="https://github.com/firecracker-microvm/firecracker" target="_blank" rel="noopener">Firecracker</a>也开源出来了。<br>根据这个架构，可以一个个模块地实现一个lambda，从worker开始</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/10/山寨aws-lambda想法/" data-id="cjuaowrrn000273083ntqqkun" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Kafka高性能措施" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/08/Kafka高性能措施/" class="article-date">
@@ -105,7 +148,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/08/Kafka高性能措施/" data-id="cju84vl9s00022v088zlq0vjw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/08/Kafka高性能措施/" data-id="cjuaowrrg00007308c4qjdywk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -163,7 +206,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/27/Firecracker调研-API规范及用处/" data-id="cju84vl9m00002v08is51in9k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/27/Firecracker调研-API规范及用处/" data-id="cjuaowrrq00057308wnrhy4p9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -239,7 +282,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/26/Firecracker调研-初探/" data-id="cju84vl9q00012v08nuk49m4i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/26/Firecracker调研-初探/" data-id="cjuaowrrp00047308s9z1c8ww" class="article-share-link">Share</a>
       
       
     </footer>
@@ -294,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/25/计算机系统-存储管理/" data-id="cju84vl9u00042v08gsevac6g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/25/计算机系统-存储管理/" data-id="cjuaowrrp00037308w1y6pf74" class="article-share-link">Share</a>
       
       
     </footer>
@@ -339,7 +382,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/18/hello-world/" data-id="cju84vl9t00032v08m9p4ikjb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/18/hello-world/" data-id="cjuaowrrl00017308e36ktpp2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -380,6 +423,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/10/山寨aws-lambda想法/">山寨aws lambda想法</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/08/Kafka高性能措施/">Kafka高性能措施</a>
           </li>
         
@@ -393,10 +440,6 @@
         
           <li>
             <a href="/2019/03/25/计算机系统-存储管理/">计算机系统-存储管理</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/18/hello-world/">Hello World</a>
           </li>
         
       </ul>
